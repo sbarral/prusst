@@ -1,11 +1,11 @@
 # prusst
 
 [![Build Status](https://travis-ci.org/sbarral/prusst.svg?branch=master)](https://travis-ci.org/sbarral/prusst)
-[![](http://meritbadge.herokuapp.com/prusst)](https://crates.io/crates/prusst)
+[![Version](http://meritbadge.herokuapp.com/prusst)](https://crates.io/crates/prusst)
 
 A convenient Rust interface to the UIO kernel module for TI Programmable Real-time Unit
-coprocessors, with roughly the same functionality as the
-[C prussdrv library](https://github.com/beagleboard/am335x_pru_package)
+coprocessors found among others on the BeagleBone development boards. It provides roughly the same
+functionality as the [C prussdrv library](https://github.com/beagleboard/am335x_pru_package)
 but with a safer, rustic API that attempts to mitigate risks related to uninitialized or
 invalid register states, use of freed memory, memory allocations conflicts etc.
 
@@ -166,7 +166,7 @@ $ sh make_pru_binaries
 $ cd ..
 ```
 
-It is also necessary to install the overlay ("cape") provided in the `examples` directory.
+It is also necessary to install the overlay ("cape") provided in the *examples* directory.
 This overlay enables the PRU subsystem and two of the PRU-privileged GPIOs:
 * `pr1_pru0_pru_r30_1`, a.k.a. BeagleBone pin P9_29
 * `pr1_pru1_pru_r30_9`, a.k.a. BeagleBone pin P8_29
@@ -188,7 +188,7 @@ examples/blink_pru0.bin  examples/blink_pru1.bin  examples/pwm_generator.bin
 $ sudo /path_to_executable/blink
 ```
 
-**Important:** the `prusst-examples.dts` overlay is incompatible with HDMI on the BeagleBone Black.
+**Important:** the *prusst-examples.dts* overlay is incompatible with HDMI on the BeagleBone Black.
 To avoid any problem, no HDMI-enabling cape should be loaded at boot time (it is apparently not
 enough to just unload them).
 
