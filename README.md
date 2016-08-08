@@ -1,5 +1,6 @@
 # prusst
 
+[![Build Status](https://travis-ci.org/sbarral/prusst.svg?branch=master)](https://travis-ci.org/sbarral/prusst)
 [![](http://meritbadge.herokuapp.com/prusst)](https://crates.io/crates/prusst)
 
 A convenient Rust interface to the UIO kernel module for TI Programmable Real-time Unit
