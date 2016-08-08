@@ -1,0 +1,15 @@
+language: rust
+rust:
+  - 1.10.0
+  - stable
+  - beta
+  - nightly
+matrix:
+  allow_failures:
+    - rust: nightly
+script:
+  - cargo build --verbose
+  - cargo build --verbose --example=blink
+  - cargo build --verbose --example=parallel_blink
+  - cargo build --verbose --example=pwm_generator
+  - cargo doc

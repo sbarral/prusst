@@ -1,5 +1,7 @@
 # prusst
 
+[![](http://meritbadge.herokuapp.com/prusst)](https://crates.io/crates/prusst)
+
 A convenient Rust interface to the UIO kernel module for TI Programmable Real-time Unit
 coprocessors, with roughly the same functionality as the
 [C prussdrv library](https://github.com/beagleboard/am335x_pru_package)
@@ -89,6 +91,8 @@ Just add the crate to your project's `Cargo.toml`:
 [dependencies]
 prusst = "0.1"
 ```
+
+Note that Rust 1.9 or above is required.
 
 
 ## Cross-compilation
