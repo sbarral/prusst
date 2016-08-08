@@ -75,7 +75,7 @@ atomicity of other interrupt management functions.
 The uio_pruss kernel module must be loaded on your system. For the BeagleBone debian distribution,
 it is available and loaded out-of-the-box with kernel 4.1.x and above on the **bone** kernel
 images (in contrast to the **TI** images which include the remoteproc module instead).
-You can install the bone image with the `--bone-kernel` or `--bone-rt-kernel` options, e.g.:
+You can install the bone image with the *--bone-kernel* or *--bone-rt-kernel* options, e.g.:
 
 ```text
 $ cd /opt/scripts/tools/
@@ -86,7 +86,7 @@ $ sudo ./update_kernel.sh --bone-kernel --lts
 
 ## Installation
 
-Just add the crate to your project's `Cargo.toml`:
+Just add the crate to your project's *Cargo.toml*:
 
 ```toml
 [dependencies]
@@ -112,7 +112,7 @@ If the host machine runs Debian Jessie, you may first need to add:
 deb http://emdebian.org/tools/debian/ jessie main
 ```
 
-to your `/etc/apt/source.list` to be able to install the cross-toolchain.
+to your */etc/apt/source.list* to be able to install the cross-toolchain.
 
 
 ## Hello world
@@ -162,14 +162,14 @@ go with:
 
 ```text
 $ cd examples
-$ sh make_pru_binaries
+$ sh make_pru_binaries.sh
 $ cd ..
 ```
 
 It is also necessary to install the overlay ("cape") provided in the *examples* directory.
 This overlay enables the PRU subsystem and two of the PRU-privileged GPIOs:
-* `pr1_pru0_pru_r30_1`, a.k.a. BeagleBone pin P9_29
-* `pr1_pru1_pru_r30_9`, a.k.a. BeagleBone pin P8_29
+* pr1_pru0_pru_r30_1, a.k.a. BeagleBone pin P9_29
+* pr1_pru1_pru_r30_9, a.k.a. BeagleBone pin P8_29
 
 The overlay is compiled, installed and loaded as usual with:
 
