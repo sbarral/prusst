@@ -1,0 +1,15 @@
+[package]
+name = "prusst"
+version = "0.1.0"
+authors = ["Serge Barral <serge.barral@quintescience.com>"]
+license = "MIT/Apache-2.0"
+description = "A convenient interface to the UIO kernel module for TI Programmable Real-time Units."
+
+[lib]
+name = "prusst"
+
+[dependencies]
+libc = "0.2"
+
+[dev-dependencies]
+crossbeam = "0.2"
