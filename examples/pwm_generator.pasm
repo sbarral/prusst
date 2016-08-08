@@ -1,6 +1,6 @@
 // 8-bit PWM periodic signal generation on P9_29 (pru0_pru_r30_1).
 //
-// The code is designed to take exactly 10 PRU cycles per PWM subsamples
+// The code is designed to take exactly 10 PRU cycles per PWM subsample
 // independently of the program flow. Since each PWM cycle is divided into 255
 // subsamples and the PRU is clocked at 200MHz, the PWM frequency is
 // approximately 78431Hz.
@@ -24,10 +24,10 @@
 .endm
 
 
-#define INS_PER_MS    200 * 1000
+#define INS_PER_MS       200 * 1000
 #define PRU0_HOST_SYSEVT 19
 #define HOST_PRU0_SYSEVT 21
-#define PRU0_IRQ_BIT  30
+#define PRU0_IRQ_BIT     30
 #define SICR_OFFSET      0x24
 
 start:
