@@ -1,9 +1,14 @@
 [package]
 name = "prusst"
+description = "A convenient interface to the UIO kernel module for TI Programmable Real-time Units."
+keywords = ["pru", "pruss", "beaglebone", "embedded"]
+readme = "README.md"
+license = "MIT/Apache-2.0"
 version = "0.1.0"
 authors = ["Serge Barral <serge.barral@quintescience.com>"]
-license = "MIT/Apache-2.0"
-description = "A convenient interface to the UIO kernel module for TI Programmable Real-time Units."
+repository = "https://github.com/sbarral/prusst"
+homepage = "https://github.com/sbarral/prusst"
+documentation = "https://sbarral.github.io/prusst-doc/prusst"
 
 [lib]
 name = "prusst"
