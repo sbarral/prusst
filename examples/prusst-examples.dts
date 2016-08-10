@@ -15,7 +15,6 @@
 
     // resources
     exclusive-use =
-        "P8.29",
         "P9.29",
         "pru0",
         "pru1";
@@ -27,7 +26,6 @@
         __overlay__ {
             pruout_pins: pinmux_pruout_pins {
                 pinctrl-single,pins = <
-                    0x0e4 0x05 // P8.29: MODE 5 (pr1_pru1_pru_r30_9), OUTPUT
                     0x194 0x05 // P9.29: MODE 5 (pr1_pru0_pru_r30_1), OUTPUT
                 >;
             };
@@ -44,8 +42,8 @@
             pinctrl-0     = <&pruout_pins>;
 
             output_pins {
-                pin-name = "P8_29", "P9_29";
-                gpios = <&gpio2 23 0 &gpio3 15 0>;
+                pin-name = "P8_29";
+                gpios = <&gpio2 23 0>;
             };
         };
     };

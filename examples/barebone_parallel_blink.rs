@@ -1,4 +1,4 @@
-//! Flash LEDs on P9_29 and P8_29 5 times respectively at 2Hz and 3.33Hz using both PRUs.
+//! Flash the BeagleBone USR1 and USR2 LEDs 5 times at 2Hz and 3.33Hz using both PRUs.
 //!
 //! This example demonstrates:
 //!
@@ -13,7 +13,22 @@ extern crate prusst;
 extern crate crossbeam;
 
 use prusst::{Pruss, Intc, IntcConfig, Evtout, Sysevt, EvtoutIrq};
+
 use std::fs::File;
+use std::io::{self, Write};
+use std::path::Path;
+
+
+static LED1_TRIGGER_PATH: &'static str = "/sys/class/leds/beaglebone:green:usr1/trigger";
+static LED1_DEFAULT_TRIGGER: &'static str = "mmc0";
+static LED2_TRIGGER_PATH: &'static str = "/sys/class/leds/beaglebone:green:usr2/trigger";
+static LED2_DEFAULT_TRIGGER: &'static str = "cpu0";
+
+
+fn echo<P: AsRef<Path>>(value: &str, path: P) -> io::Result<()> {
+    let mut file = try!(File::create(&path));
+    file.write_all(value.as_bytes())
+}
 
 
 fn blink_monitor(irq: EvtoutIrq, sysevt: Sysevt, my_name: &str, intc: &Intc) {
@@ -57,12 +72,18 @@ fn main() {
     let irq0 = pruss.intc.register_irq(Evtout::E0);
     let irq1 = pruss.intc.register_irq(Evtout::E1);
     
-    // Open, load and run a PRU binary on each PRU core.
-    let mut pru0_binary = File::open("examples/blink_pru0.bin").unwrap();
-    unsafe { pruss.pru0.load_code(&mut pru0_binary).unwrap().run(); }
-    let mut pru1_binary = File::open("examples/blink_pru1.bin").unwrap();
-    unsafe { pruss.pru1.load_code(&mut pru1_binary).unwrap().run(); }
+    // Open and load the PRU binaries on each PRU core.
+    let mut pru0_binary = File::open("examples/barebone_blink_pru0.bin").unwrap();
+    let mut pru1_binary = File::open("examples/barebone_blink_pru1.bin").unwrap();
     
+    // Temporarily take control of the LEDs.
+    echo("none", LED1_TRIGGER_PATH).unwrap();
+    echo("none", LED2_TRIGGER_PATH).unwrap();
+
+    // Run the PRU binaries.
+    unsafe { pruss.pru0.load_code(&mut pru0_binary).unwrap().run(); }
+    unsafe { pruss.pru1.load_code(&mut pru1_binary).unwrap().run(); }
+
     // Launch a monitoring thread for each PRU core.
     crossbeam::scope(|scope| {
         scope.spawn(|| { blink_monitor(irq0, Sysevt::S19, "PRU0", &pruss.intc) } );
@@ -71,5 +92,9 @@ fn main() {
 
     // Wait for completion on both PRUs.
     println!("Goodbye!");
+    
+    // Restore default LEDs statuses.
+    echo(LED1_DEFAULT_TRIGGER, LED1_TRIGGER_PATH).unwrap();
+    echo(LED2_DEFAULT_TRIGGER, LED2_TRIGGER_PATH).unwrap();
 }
 

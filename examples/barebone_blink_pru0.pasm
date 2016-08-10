@@ -3,7 +3,6 @@
 .origin 0
 .entrypoint start
 
-
 // On-board LEDs
 #define GPIO1 0x4804C000
 #define CLEARDATAOUT_OFFSET 0x190
@@ -13,7 +12,7 @@
 #define USR2_GPIO1_23     1 << 23
 #define USR3_GPIO1_24     1 << 24
 
-// Flash led 5 times every 500ms with a 50% duty cycle.
+// Settings for a 500ms period and 50% duty cycle.
 #define INS_PER_MS    200 * 1000
 #define ON_DURATION   250 * INS_PER_MS
 #define OFF_DURATION  250 * INS_PER_MS
@@ -39,6 +38,7 @@ start:
 
 start_loop:
     sbbo r4, r2, 0, 4        // turn LED on
+    mov  r31.b0, 32 | (PRU0_ARM_SYSEVT - 16) // notify LED blink to host
     mov  r0, ON_DURATION
 
 delay_on:
