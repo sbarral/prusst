@@ -148,28 +148,38 @@ fn main() {
 
 ## Examples
 
-More advanced usage of the library (memory allocation, 2-ways communication with PRU, concurrent
-management of IRQs, etc.) is demonstrated in the examples of the distribution tree.
-If the library has been locally cloned, specific examples can be build as follows:
+More advanced usage of the library is demonstrated in the [examples](examples), such as PRU RAM
+allocation, 2-ways communication with PRU, concurrent management of IRQs, etc.
+
+Assuming the prusst crate has been locally cloned and the PASM assembler is installed (if not just
+apt-get the *am335x-pru-package*), the first step before running the examples is to compile the PRU
+programs. This can be done in one go from the root crate directory with:
 
 ```text
-$ cargo build --example blink
+$ cd examples; sh make_pru_binaries.sh; cd ..
 ```
 
-Before actually running the examples, however, it is first necessary to compile the associated
-PRU programs. Assuming the PASM assembler is installed, all PRU programs can be compiled in one
-go with:
+You can then proceed to build the examples, e.g.:
 
 ```text
-$ cd examples
-$ sh make_pru_binaries.sh
-$ cd ..
+$ cargo build --example barebone_blink
 ```
 
-It is also necessary to install the overlay ("cape") provided in the *examples* directory.
-This overlay enables the PRU subsystem and two of the PRU-privileged GPIOs:
-* pr1_pru0_pru_r30_1, a.k.a. BeagleBone pin P9_29
-* pr1_pru1_pru_r30_9, a.k.a. BeagleBone pin P8_29
+If you have a BeagleBone board and a loaded cape that enables the PRU (such as *cape-universal* and
+friends), you can right away blink your on-board USR LEDs with the *barebone_blink*
+or *barebone_parallel_blink* examples. They must be run with root privilege from a location
+containing an *examples* directory with the PRU executables:
+
+```text
+$ ls examples/*.bin
+examples/barebone_blink_pru0.bin  examples/barebone_blink_pru1.bin  examples/pwm_generator.bin
+$ sudo /path_to_executable/barebone_blink
+```
+
+If you do not have a BeagleBone and a PRU-enabling cape, or if you want to run the
+*pwm_generator* example, you should install the *prusst-examples* overlay provided in the *examples*
+directory. This overlay enables the PRU subsystem and a PRU-privileged GPIO (pr1_pru0_pru_r30_1, a.k.a.
+pin P9_29 on the BeagleBone).
 
 The overlay is compiled, installed and loaded as usual with:
 
@@ -179,18 +189,10 @@ $ sudo cp examples/prusst-examples-00A0.dtbo /lib/firmware
 $ sudo sh -c "echo 'prusst-examples' > /sys/devices/platform/bone_capemgr/slots"
 ```
 
-Finally, the examples must be run as root from a local directory containing a sub-directory
-*examples* which itself contains the PRU executables:
-
-```text
-$ ls examples/*.bin
-examples/blink_pru0.bin  examples/blink_pru1.bin  examples/pwm_generator.bin
-$ sudo /path_to_executable/blink
-```
-
-**Important:** the *prusst-examples.dts* overlay is incompatible with HDMI on the BeagleBone Black.
-To avoid any problem, no HDMI-enabling cape should be loaded at boot time (it is apparently not
-enough to just unload them).
+> IMPORTANT: the *prusst-examples* overlay is incompatible with HDMI on the BeagleBone Black and
+> other HDMI-equipped boards.
+> To avoid any problem, no HDMI-enabling cape should be loaded at boot time (it is apparently not
+> enough to just unload them).
 
 
 ## License
