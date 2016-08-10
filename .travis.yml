@@ -9,7 +9,7 @@ matrix:
     - rust: nightly
 script:
   - cargo build --verbose
-  - cargo build --verbose --example=blink
-  - cargo build --verbose --example=parallel_blink
+  - cargo build --verbose --example=barebone_blink
+  - cargo build --verbose --example=barebone_parallel_blink
   - cargo build --verbose --example=pwm_generator
   - cargo doc
