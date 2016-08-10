@@ -73,20 +73,20 @@ fn main() {
     let ctrl = bank1.alloc(Ctrl { sample_count: VolatileCell::new(0), sample_length: 0 });
     let wave = unsafe { bank2.alloc_uninitialized::<[u8; NB_SAMPLES]>() };
 
-    // Ask for the amplitude and frequency of the wave
+    // Ask for the amplitude and frequency of the wave.
     let max_frequency: f32 = PRU_FREQUENCY /
         (TICKS_PER_SUBSAMPLE as f32 * MIN_SAMPLE_LENGTH as f32 * NB_SAMPLES as f32);
     let amplitude:  f32 = get_input("Amplitude [%]",  0.0, 100.0)/100.0;
     let frequency:  f32 = get_input("Frequency [Hz]", 0.0, max_frequency);
     let duration:   f32 = get_input("Duration [s]",   0.0, 60.0);
     
-    // Compute the number of sub-sampling cycles per wave sample to achieve the requested frequency
+    // Compute the number of sub-sampling cycles per sample required for the requested frequency.
     let sampling_frequency: f32 = frequency * (NB_SAMPLES as f32);
     let sampling_period:    f32 = 1.0/sampling_frequency;
     let ticks_per_sample:   f32 = sampling_period * PRU_FREQUENCY; // PRU clock ticks per sample
     let sample_length:      u32 = (ticks_per_sample / (TICKS_PER_SUBSAMPLE as f32)).round() as u32;
 
-    // Write the cycle length and generate the sine wave data
+    // Write the cycle length and generate the sine wave data.
     println!("\nGenerating wave with frequency {} Hz", PRU_FREQUENCY /
         (TICKS_PER_SUBSAMPLE as f32 * sample_length as f32 * NB_SAMPLES as f32) );
     ctrl.sample_length = sample_length;

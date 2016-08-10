@@ -1,14 +1,20 @@
-//! Flash a LED on P9_29 (pru0_pru_r30_1) 5 times at 2Hz.
-//!
-//! The PRU code notifies the host processor every time the LED is flashed by triggering Evtout0.
-//! The 6-th event out is interpreted as a completion notification. 
+//! Flash the BeagleBone USR1 LED 5 times at 2Hz.
 
 extern crate prusst;
 
 use prusst::{Pruss, IntcConfig, Evtout, Sysevt};
+
 use std::fs::File;
+use std::io::{self, Write};
+use std::path::Path;
+
+static LED_TRIGGER_PATH: &'static str = "/sys/class/leds/beaglebone:green:usr1/trigger";
+static LED_DEFAULT_TRIGGER: &'static str = "mmc0";
 
 fn main() {
+    // Temporarily take away control of the LED.
+    echo("none", LED_TRIGGER_PATH).unwrap();
+
     // Get a view of the PRU subsystem.
     let mut pruss = match Pruss::new(&IntcConfig::new_populated()) {
         Ok(p) => p,
@@ -31,22 +37,21 @@ fn main() {
     let irq = pruss.intc.register_irq(Evtout::E0);
 
     // Open and load a PRU binary.
-    let mut pru_binary = File::open("examples/blink_pru0.bin").unwrap();
+    let mut pru_binary = File::open("examples/barebone_blink.bin").unwrap();
     unsafe { pruss.pru0.load_code(&mut pru_binary).unwrap().run(); }
     
-    // Let us know when the LED is turned on.
-    for i in 1..6 {
-        // Wait for the PRU to trigger the event out.
-        irq.wait();
-        println!("Blink {}", i);
-
-        // Clear the triggering interrupt and re-enable the host irq.
-        pruss.intc.clear_sysevt(Sysevt::S19);
-        pruss.intc.enable_host(Evtout::E0);
-    }
-
     // Wait for completion of the PRU code.
     irq.wait();
     pruss.intc.clear_sysevt(Sysevt::S19);
     println!("Goodbye!");
+    
+    // Restore default LED status.
+    echo(LED_DEFAULT_TRIGGER, LED_TRIGGER_PATH).unwrap();
 }
+
+
+fn echo<P: AsRef<Path>>(value: &str, path: P) -> io::Result<()> {
+    let mut file = try!(File::create(&path));
+    file.write_all(value.as_bytes())
+}
+

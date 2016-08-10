@@ -30,6 +30,7 @@ fn blink_monitor(irq: EvtoutIrq, sysevt: Sysevt, my_name: &str, intc: &Intc) {
     
     // Wait for completion of the PRU code.
     irq.wait();
+    intc.clear_sysevt(sysevt);
 }
 
 

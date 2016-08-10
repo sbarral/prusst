@@ -10,14 +10,14 @@
 #define NB_BLINKS     5
 
 // Assume that SYSEVT19 is mapped to EVTOUT0.
-#define PRU1_HOST_SYSEVT 20
+#define PRU1_ARM_SYSEVT 20
 
 start:
     mov  r1, NB_BLINKS
 
 start_loop:
     set  r30.t9              // turn LED on
-    mov  r31.b0, 32 | (PRU1_HOST_SYSEVT - 16) // notify LED blink to host
+    mov  r31.b0, 32 | (PRU1_ARM_SYSEVT - 16) // notify LED blink to host
     mov  r0, ON_DURATION
 
 delay_on:
@@ -35,6 +35,6 @@ delay_off:
     sub  r1, r1, 1
     qbne start_loop, r1, 0
 
-    mov  r31.b0, 32 | (PRU1_HOST_SYSEVT - 16) // notify completion to host
+    mov  r31.b0, 32 | (PRU1_ARM_SYSEVT - 16) // notify completion to host
     halt
 

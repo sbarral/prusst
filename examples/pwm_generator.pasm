@@ -24,11 +24,11 @@
 .endm
 
 
-#define INS_PER_MS       200 * 1000
-#define PRU0_HOST_SYSEVT 19
-#define HOST_PRU0_SYSEVT 21
+#define PRU0_ARM_SYSEVT 19
+#define ARM_PRU0_SYSEVT 21
 #define PRU0_IRQ_BIT     30
 #define SICR_OFFSET      0x24
+#define CONST_INTC       c0
 
 start:
     ldi  r10, 0x000          // r10: RAM base address
@@ -58,9 +58,9 @@ increment:                   // [5 cycles]
     qbbc subsampling_loop_start, r31, PRU0_IRQ_BIT // irq received from host?
 
 end:
-    ldi  r7, HOST_PRU0_SYSEVT
-    sbco r7, c0, SICR_OFFSET, 2 // clear system event triggered by host
+    ldi  r7, ARM_PRU0_SYSEVT
+    sbco r7, CONST_INTC, SICR_OFFSET, 2 // clear system event triggered by host
     sbbo r2, r10, 0, 4       // store total sample count to data RAM
-    mov  r31.b0, 32 | (PRU0_HOST_SYSEVT - 16) // notify completion to host
+    mov  r31.b0, 32 | (PRU0_ARM_SYSEVT - 16) // notify completion to host
     halt
 
