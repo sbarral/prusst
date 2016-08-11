@@ -8,16 +8,15 @@ extern crate prusst;
 use prusst::{Pruss, IntcConfig, Evtout, Sysevt};
 
 use std::fs::File;
-use std::io::{self, Write};
-use std::path::Path;
+use std::io::Write;
 
 static LED_TRIGGER_PATH: &'static str = "/sys/class/leds/beaglebone:green:usr1/trigger";
 static LED_DEFAULT_TRIGGER: &'static str = "mmc0";
 
 
-fn echo<P: AsRef<Path>>(value: &str, path: P) -> io::Result<()> {
-    let mut file = try!(File::create(&path));
-    file.write_all(value.as_bytes())
+fn echo(value: &str, path: &str) {
+    let mut file = File::create(path).unwrap();
+    file.write_all(value.as_bytes()).unwrap();
 }
 
 
@@ -47,7 +46,7 @@ fn main() {
     let mut pru_binary = File::open("examples/barebone_blink_pru0.bin").unwrap();
     
     // Temporarily take control of the LED.
-    echo("none", LED_TRIGGER_PATH).unwrap();
+    echo("none", LED_TRIGGER_PATH);
 
     // Run the PRU binary.
     unsafe { pruss.pru0.load_code(&mut pru_binary).unwrap().run(); }
@@ -69,6 +68,6 @@ fn main() {
     println!("Goodbye!");
     
     // Restore default LED status.
-    echo(LED_DEFAULT_TRIGGER, LED_TRIGGER_PATH).unwrap();
+    echo(LED_DEFAULT_TRIGGER, LED_TRIGGER_PATH);
 }
 

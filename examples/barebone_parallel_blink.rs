@@ -15,8 +15,7 @@ extern crate crossbeam;
 use prusst::{Pruss, Intc, IntcConfig, Evtout, Sysevt, EvtoutIrq};
 
 use std::fs::File;
-use std::io::{self, Write};
-use std::path::Path;
+use std::io::Write;
 
 
 static LED1_TRIGGER_PATH: &'static str = "/sys/class/leds/beaglebone:green:usr1/trigger";
@@ -25,9 +24,9 @@ static LED2_TRIGGER_PATH: &'static str = "/sys/class/leds/beaglebone:green:usr2/
 static LED2_DEFAULT_TRIGGER: &'static str = "cpu0";
 
 
-fn echo<P: AsRef<Path>>(value: &str, path: P) -> io::Result<()> {
-    let mut file = try!(File::create(&path));
-    file.write_all(value.as_bytes())
+fn echo(value: &str, path: &str) {
+    let mut file = File::create(path).unwrap();
+    file.write_all(value.as_bytes()).unwrap();
 }
 
 
@@ -77,8 +76,8 @@ fn main() {
     let mut pru1_binary = File::open("examples/barebone_blink_pru1.bin").unwrap();
     
     // Temporarily take control of the LEDs.
-    echo("none", LED1_TRIGGER_PATH).unwrap();
-    echo("none", LED2_TRIGGER_PATH).unwrap();
+    echo("none", LED1_TRIGGER_PATH);
+    echo("none", LED2_TRIGGER_PATH);
 
     // Run the PRU binaries.
     unsafe { pruss.pru0.load_code(&mut pru0_binary).unwrap().run(); }
@@ -94,7 +93,7 @@ fn main() {
     println!("Goodbye!");
     
     // Restore default LEDs statuses.
-    echo(LED1_DEFAULT_TRIGGER, LED1_TRIGGER_PATH).unwrap();
-    echo(LED2_DEFAULT_TRIGGER, LED2_TRIGGER_PATH).unwrap();
+    echo(LED1_DEFAULT_TRIGGER, LED1_TRIGGER_PATH);
+    echo(LED2_DEFAULT_TRIGGER, LED2_TRIGGER_PATH);
 }
 
