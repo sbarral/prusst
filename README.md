@@ -151,8 +151,8 @@ fn main() {
 More advanced usage of the library is demonstrated in the [examples](examples), such as PRU RAM
 allocation, 2-ways communication with PRU, concurrent management of IRQs, etc.
 
-Assuming the prusst crate has been locally cloned and the PASM assembler is installed (if not just
-apt-get the *am335x-pru-package*), the first step before running the examples is to compile the PRU
+Assuming the prusst crate has been locally cloned and the PASM assembler is installed (if not, just
+apt-get the *am335x‑pru‑package*), the first step before running the examples is to compile the PRU
 programs. This can be done in one go from the root crate directory with:
 
 ```text
