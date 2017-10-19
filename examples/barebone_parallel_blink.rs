@@ -57,7 +57,7 @@ fn main() {
                 => panic!("You can't instantiate more than one `Pruss` object at a time."),
             prusst::Error::PermissionDenied
                 => panic!("You do not have permission to access the PRU subsystem: \
-                           maybe you should log as root?"),
+                           maybe you should run this program as root?"),
             prusst::Error::DeviceNotFound
                 => panic!("The PRU subsystem could not be found: are you sure the `uio_pruss` \
                            module is loaded and supported by your kernel?"),

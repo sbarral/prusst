@@ -55,7 +55,7 @@ fn main() {
                 => panic!("You can't instantiate more than one `Pruss` object at a time."),
             prusst::Error::PermissionDenied
                 => panic!("You do not have permission to access the PRU subsystem: \
-                           maybe you should log as root?"),
+                           maybe you should run this program as root?"),
             prusst::Error::DeviceNotFound
                 => panic!("The PRU subsystem could not be found: are you sure the `uio_pruss` \
                            module is loaded and supported by your kernel?"),
@@ -107,7 +107,7 @@ fn main() {
                                 (duration.fract()*1e9).floor() as u32));
     pruss.intc.send_sysevt(Sysevt::S21);
     
-    // Await for acknowledgement from PRU.
+    // Await acknowledgement from PRU.
     irq.wait();
     pruss.intc.clear_sysevt(Sysevt::S19);
 
