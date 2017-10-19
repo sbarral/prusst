@@ -89,7 +89,7 @@ use std::mem;
 use std::ops::{BitOrAssign, Shl};
 use std::ptr;
 use std::result;
-use std::sync::atomic::{AtomicBool, Ordering, ATOMIC_BOOL_INIT};
+use std::sync::atomic::{AtomicBool, Ordering, ATOMIC_BOOL_INIT, compiler_fence};
 
 
 
@@ -371,9 +371,6 @@ impl PruLoader {
     /// IO errors that may occur while reading the buffer are forwarded.
     /// If the buffer cannot be read entirely because the code does not fit into the instruction
     /// RAM, an error of the kind `ErrorKind::InvalidInput` is returned.
-    // Disallow inlining: since `Read::read` does not use volatile stores, the compiler may
-    // otherwise optimize away memory writes.
-    #[inline(never)]
     pub fn load_code<R: Read>(&mut self, code: &mut R) -> io::Result<PruCode> {
         // Invoke a soft reset of the PRU to make sure no code is currently running.
         self.reset();
@@ -387,7 +384,13 @@ impl PruLoader {
                 Err(io::Error::new(io::ErrorKind::InvalidInput,
                                    "size of PRU code exceeding instruction RAM capacity"))
             }
-            _ => Ok(PruCode::new(self.pructrl_reg)),
+            _ => {
+                // Introduce a fence to ensure that IRAM writes are not reordered past the
+                // call to PruCode::run().
+                // Does it actually work? Who knows, we did what we could.
+                compiler_fence(Ordering::Release);
+                Ok(PruCode::new(self.pructrl_reg))
+            }
         }
     }
 
