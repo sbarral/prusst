@@ -18,8 +18,8 @@
 #define OFF_DURATION  150 * INS_PER_MS
 #define NB_BLINKS     5
 
-// Assume that SYSEVT19 is mapped to EVTOUT0.
-#define PRU0_ARM_SYSEVT 20
+// Assume that SYSEVT20 is mapped to EVTOUT1.
+#define PRU1_ARM_SYSEVT 20
 
 // Constant registers
 #define CPRUCFG  c4
@@ -38,7 +38,7 @@ start:
 
 start_loop:
     sbbo r4, r2, 0, 4        // turn LED on
-    mov  r31.b0, 32 | (PRU0_ARM_SYSEVT - 16) // notify LED blink to host
+    mov  r31.b0, 32 | (PRU1_ARM_SYSEVT - 16) // notify LED blink to host
     mov  r0, ON_DURATION
 
 delay_on:
@@ -56,6 +56,6 @@ delay_off:
     sub  r1, r1, 1
     qbne start_loop, r1, 0
 
-    mov  r31.b0, 32 | (PRU0_ARM_SYSEVT - 16) // notify completion to host
+    mov  r31.b0, 32 | (PRU1_ARM_SYSEVT - 16) // notify completion to host
     halt
 

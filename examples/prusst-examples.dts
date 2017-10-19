@@ -42,7 +42,7 @@
             pinctrl-0     = <&pruout_pins>;
 
             output_pins {
-                pin-name = "P8_29";
+                pin-name = "P9_29";
                 gpios = <&gpio2 23 0>;
             };
         };
