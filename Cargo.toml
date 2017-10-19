@@ -4,7 +4,7 @@ description = "A convenient interface to the UIO kernel module for TI Programmab
 keywords = ["pru", "pruss", "beaglebone", "embedded"]
 readme = "README.md"
 license = "MIT/Apache-2.0"
-version = "0.1.0"
+version = "1.0.0"
 authors = ["Serge Barral <serge.barral@quintescience.com>"]
 repository = "https://github.com/sbarral/prusst"
 homepage = "https://github.com/sbarral/prusst"
@@ -17,4 +17,4 @@ name = "prusst"
 libc = "0.2"
 
 [dev-dependencies]
-crossbeam = "0.2"
+crossbeam = "0.3"
